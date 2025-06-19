@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from src.db.main import initdb
 from src.zoho_nigeria_inventory.routes.items_routes import router as api_router
 from src.zoho_nigeria_inventory.db.database import async_session, init_db
 from src.zoho_nigeria_inventory.utils.items_scheduler import scheduled_sync
@@ -16,10 +17,26 @@ from src.zoho_nigeria_sales.utils.picklists_scheduler import picklists_scheduled
 from src.zoho_nigeria_sales.utils.sales_orders_scheduler import sales_orders_scheduled_sync
 from src.zoho_nigeria_purchases.utils.vendors_scheduler import vendors_scheduled_sync
 from src.zoho_nigeria_purchases.utils.purchase_orders_scheduler import purchase_orders_sync
+from src.kool_assembly.routes.routes_batteries import battery_router
 
 
 
-app = FastAPI()
+
+#lifespan event
+@asynccontextmanager
+async def lifespan(app:FastAPI):
+    await initdb()
+    yield
+    print("server is stopping") 
+
+version = 'v1'
+
+app = FastAPI(
+    title="Kool Data Hub",
+    description="A REST API for Koolboks data web service",
+    version= version,
+    lifespan=lifespan
+)
 
 scheduler = AsyncIOScheduler()
 
@@ -35,6 +52,7 @@ app.add_middleware(
 
 # Routes
 app.include_router(api_router)
+app.include_router(battery_router, prefix=f"/api/{version}/battery", tags=['battery'])
 # Static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -43,6 +61,7 @@ async def startup_event():
     await init_db()
     scheduler.start()
     # scheduler.add_job(scheduled_sync, "cron", hour=13, minute=0)
+    scheduler.add_job(scheduled_sync,trigger="cron", minute='*/1')
     # scheduler.add_job(composite_scheduled_sync, "cron", hour=14, minute=0)
     # scheduler.add_job(price_lists_scheduled_sync, "cron", hour=15, minute=0)
     # scheduler.add_job(sync_inventory_adjustments, "cron", hour=16, minute=0)
