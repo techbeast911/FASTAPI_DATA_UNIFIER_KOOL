@@ -1,36 +1,3 @@
-# from sqlalchemy.ext.asyncio import create_async_engine
-# from sqlalchemy import text
-# from src.config import Config
-# from sqlmodel import SQLModel
-# from sqlalchemy.ext.asyncio import AsyncEngine
-# from sqlmodel import create_engine, text
-# from src.kool_assembly.models.models_battery import Battery
-# from src.kool_assembly.models.models_inventory_in import Inventory_in
-# from src.kool_assembly.models.models_inventory_return import Inventory_return
-# from src.kool_assembly.models.models_inverters import Inverters
-# from src.kool_assembly.models.models_iot import Iot
-# from src.kool_assembly.models.models_paygo import Paygo
-# from src.kool_assembly.models.models_production import Production
-# from src.kool_assembly.models.models_quality import Quality
-
-
-# engine = AsyncEngine(create_engine(
-#     url=Config.DATABASE_URL,
-#     echo=True
-# ))
-
-
-
-
-
-# async def initdb():
-#     """create our database models in the database"""
-
-#     async with engine.begin() as conn:
-#         await conn.execute(text("CREATE SCHEMA IF NOT EXISTS kool_assembly"))
-#         await conn.execute(text("CREATE SCHEMA IF NOT EXISTS maintenance"))
-#         await conn.run_sync(SQLModel.metadata.create_all)
-
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker # Import AsyncSession and async_sessionmaker
 from sqlalchemy import text
@@ -48,13 +15,13 @@ from src.kool_assembly.models.models_iot import Iot
 from src.kool_assembly.models.models_paygo import Paygo
 from src.kool_assembly.models.models_production import Production
 from src.kool_assembly.models.models_quality import Quality
+from src.auth.auth_models import User
 
 
 # Create async engine
 # Use create_async_engine directly, not AsyncEngine(create_engine(...))
 engine = create_async_engine(
     Config.DATABASE_URL,
-    echo=True, # Set to True for verbose logging of SQL queries
     future=True # Recommended for SQLAlchemy 2.0 style operations
 )
 
@@ -76,7 +43,7 @@ async def get_session():
         yield session
 
 
-async def initdb(): # Renamed from initdb to init_db for consistency with main.py
+async def initdb(): 
     """
     Creates database schemas and tables based on SQLModel metadata.
     """

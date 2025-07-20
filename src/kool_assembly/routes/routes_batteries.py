@@ -1,16 +1,24 @@
+# File: src/kool_assembly/routes/routes_batteries.py
+# -*- coding: utf-8 -*-
+
 
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List, Optional
 from uuid import UUID
 
-from src.db.main import get_session # Corrected import for get_session
+from src.db.main import get_session
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.kool_assembly.schemas.schemas_batteries import BatteryCreate, BatteryRecord, BatteryUpdate
 from src.kool_assembly.services.services_batteries import BatteryService
+from src.auth.auth_dependencies import AccessTokenBearer
+
+
 
 
 # Initialize the APIRouter for battery-related endpoints
+# IMPORTANT: No 'prefix' here. The prefix will be added when including in main.py
+
 
 battery_router = APIRouter(
     tags=["Batteries"] # Tags for API documentation (Swagger UI)
@@ -18,12 +26,15 @@ battery_router = APIRouter(
 
 battery_service = BatteryService()
 
+access_token_bearer= AccessTokenBearer()
+
 
 @battery_router.get("/", response_model=List[BatteryRecord])
-async def get_all_batteries(session: AsyncSession = Depends(get_session)) -> List[BatteryRecord]:
+async def get_all_batteries(session: AsyncSession = Depends(get_session),) -> List[BatteryRecord]:
     """
     Retrieve a list of all battery records.
     """
+    #print(user_details)
     batteries = await battery_service.get_all_batteries(session)
     return batteries
 
@@ -31,7 +42,7 @@ async def get_all_batteries(session: AsyncSession = Depends(get_session)) -> Lis
 @battery_router.post("/", response_model=BatteryRecord, status_code=status.HTTP_201_CREATED)
 async def create_battery(
     battery_data: BatteryCreate,
-    session: AsyncSession = Depends(get_session)
+    session: AsyncSession = Depends(get_session),
 ) -> BatteryRecord:
     """
     Create a new battery record.
@@ -43,7 +54,7 @@ async def create_battery(
 @battery_router.get("/{battery_uid}", response_model=BatteryRecord)
 async def get_battery_by_uid(
     battery_uid: UUID,
-    session: AsyncSession = Depends(get_session)
+    session: AsyncSession = Depends(get_session),
 ) -> BatteryRecord:
     """
     Retrieve a single battery record by its unique identifier (UID).
@@ -59,7 +70,7 @@ async def get_battery_by_uid(
 @battery_router.get("/serial/{product_serial_number}", response_model=BatteryRecord)
 async def get_battery_by_serial_number(
     product_serial_number: str,
-    session: AsyncSession = Depends(get_session)
+    session: AsyncSession = Depends(get_session),
 ) -> BatteryRecord:
     """
     Retrieve a single battery record by its product serial number.
@@ -77,7 +88,7 @@ async def get_battery_by_serial_number(
 async def update_battery(
     battery_uid: UUID,
     battery_update_data: BatteryUpdate,
-    session: AsyncSession = Depends(get_session)
+    session: AsyncSession = Depends(get_session),
 ) -> BatteryRecord:
     """
     Update an existing battery record by its UID.
@@ -95,7 +106,7 @@ async def update_battery(
 @battery_router.delete("/{battery_uid}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_battery(
     battery_uid: UUID,
-    session: AsyncSession = Depends(get_session)
+    session: AsyncSession = Depends(get_session),
 ):
     """
     Delete a battery record by its UID.
@@ -108,3 +119,4 @@ async def delete_battery(
             detail=f"Battery with UID '{battery_uid}' not found"
         )
     return None
+

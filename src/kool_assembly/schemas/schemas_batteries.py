@@ -1,5 +1,6 @@
+
 from pydantic import BaseModel
-from uuid import UUID,uuid4
+from uuid import UUID, uuid4
 from datetime import datetime
 from typing import Optional
 
@@ -16,8 +17,7 @@ class BatteryCreate(BaseModel):
     faulty_component : str
     remedy : str
     product_category_new_ref : str
-    date_sent_out : Optional[datetime] = None 
-
+    date_sent_out : Optional[datetime] = None
 
 
 # Schema for reading/representing a complete battery record (output from database)
@@ -35,11 +35,35 @@ class BatteryRecord(BaseModel):
     faulty_component : str
     remedy : str
     product_category_new_ref : str
-    date_sent_out : datetime # This will always have a value once saved
+    date_sent_out : Optional[datetime] # This will always have a value once saved
+
+    class Config:
+        # Pydantic V2+ equivalent of orm_mode = True
+        # This tells Pydantic to read attributes from ORM objects (like SQLModel instances)
+        from_attributes = True # <-- CRITICAL CHANGE HERE
+        # You can still add json_schema_extra for examples
+        json_schema_extra = {
+            "examples": [
+                {
+                    "uid": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+                    "created_at": "2025-06-19T16:00:00", # Example date
+                    "customer_name": "Tech Solutions",
+                    "product_sku": "BATT-XYZ-001",
+                    "product_serial_number": "SN-0012345",
+                    "field_technician": "Alice Green",
+                    "condition": "New",
+                    "receiver": "Central Warehouse",
+                    "faulty_component": "N/A",
+                    "remedy": "N/A",
+                    "product_category_new_ref": "Standard Power Cell",
+                    "date_sent_out": "2025-06-19T16:30:00" # Example date
+                }
+            ]
+        }
 
 
-# Schema for updating existing battery records (all fields are optional)
 class BatteryUpdate(BaseModel):
+
     customer_name : Optional[str] = None
     product_sku : Optional[str] = None
     product_serial_number : Optional[str] = None
