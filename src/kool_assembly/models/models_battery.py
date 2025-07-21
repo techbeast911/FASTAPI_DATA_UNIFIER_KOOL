@@ -21,8 +21,8 @@ class Battery(SQLModel , table=True):
     )
     
     created_at : datetime = Field(
-        default_factory=datetime.now, # Generates datetime when object is instantiated
-        sa_column=Column(pg.TIMESTAMP, nullable=False) # Keep nullable=False
+        default_factory=datetime.now, 
+        sa_column=Column(pg.TIMESTAMP, nullable=False) 
     )
     updated_at: Optional[datetime] = Field(
         default_factory=datetime.now,
@@ -37,10 +37,9 @@ class Battery(SQLModel , table=True):
     faulty_component : str
     remedy : str
     product_category_new_ref : str
-    # FIX 3: Use default_factory for date_sent_out to handle None from BatteryCreate
-    date_sent_out : datetime = Field( # Keep it 'datetime' as it will always be a datetime after default
-        default_factory=datetime.now, # Generates datetime if None or not provided
-        sa_column=Column(pg.TIMESTAMP, nullable=False) # Keep nullable=False
+    date_sent_out : datetime = Field( 
+        default_factory=datetime.now, 
+        sa_column=Column(pg.TIMESTAMP, nullable=False)
     )
 
     def __repr__(self) -> str:

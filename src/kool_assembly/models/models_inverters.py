@@ -2,7 +2,7 @@ from sqlmodel import SQLModel, Field, Column
 import sqlalchemy.dialects.postgresql as pg
 import uuid
 from datetime import datetime
-from typing import Optional # Keep this import for Optional fields
+from typing import Optional 
 
 class Inverters(SQLModel , table=True):
     __tablename__ = "inverters"
@@ -20,7 +20,7 @@ class Inverters(SQLModel , table=True):
     created_at: datetime = Field(
         sa_column=Column(pg.TIMESTAMP(timezone=True), default=datetime.now, nullable=False)
     )
-    # **RECOMMENDED: Add updated_at field for better tracking**
+    
     updated_at: Optional[datetime] = Field(
         default_factory=datetime.now,
         sa_column=Column(pg.TIMESTAMP(timezone=True), onupdate=datetime.now, nullable=True) # nullable=True allows it to be null initially if DB schema allows

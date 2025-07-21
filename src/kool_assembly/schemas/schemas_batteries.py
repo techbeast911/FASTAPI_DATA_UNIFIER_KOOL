@@ -38,10 +38,9 @@ class BatteryRecord(BaseModel):
     date_sent_out : Optional[datetime] # This will always have a value once saved
 
     class Config:
-        # Pydantic V2+ equivalent of orm_mode = True
-        # This tells Pydantic to read attributes from ORM objects (like SQLModel instances)
+       
         from_attributes = True # <-- CRITICAL CHANGE HERE
-        # You can still add json_schema_extra for examples
+        
         json_schema_extra = {
             "examples": [
                 {

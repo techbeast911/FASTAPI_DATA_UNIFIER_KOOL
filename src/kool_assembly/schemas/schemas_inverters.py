@@ -28,12 +28,11 @@ class InvertersRecord(BaseModel):
     engineer_name: str
     inverter_size: str
     customer_name: str
-    # If release_date can be null in the DB, it must be Optional here
-    release_date: Optional[datetime] # Change to Optional if model can have None
-    # If return_inverter_id can be null in the DB, it must be Optional here
-    return_inverter_id: Optional[str] # Change to Optional if model can have None
-    # If return_date can be null in the DB, it must be Optional here
-    return_date: Optional[datetime] # Change to Optional if model can have None
+   
+    release_date: Optional[datetime] 
+    return_inverter_id: Optional[str] 
+    
+    return_date: Optional[datetime] 
 
     # This is important for Pydantic to read from ORM attributes
     class Config:
@@ -41,7 +40,7 @@ class InvertersRecord(BaseModel):
 
 
 class InvertersUpdate(BaseModel):
-    # All fields for update should be Optional
+    
     engineer_name: Optional[str] = None
     inverter_size: Optional[str] = None
     customer_name: Optional[str] = None

@@ -28,10 +28,6 @@ class Inventory_in(SQLModel , table=True):
     product_category_new_ref : str
     product_type : str
     brought_in_from : str
-    # IMPORTANT: If date_logged_out is meant to be set only when it's "logged out",
-    # then having a default=datetime.now might not be what you want.
-    # If it can be null initially, make it Optional[datetime] and remove the default.
-    # If it must always have a value upon creation, then default=datetime.now is fine.
     date_logged_out : datetime = Field(sa_column=Column(pg.TIMESTAMP, default=datetime.now))
 
     def __repr__(self) -> str:

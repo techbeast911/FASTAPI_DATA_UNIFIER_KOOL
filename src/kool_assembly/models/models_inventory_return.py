@@ -9,9 +9,9 @@ class Inventory_return(SQLModel , table=True):
     __table_args__ = {"schema": "kool_assembly"}
 
     uid: uuid.UUID = Field(
-        default_factory=uuid.uuid4, # <-- THIS IS THE CRUCIAL ADDITION
+        default_factory=uuid.uuid4, 
         sa_column=Column(
-            pg.UUID(as_uuid=True), # Use as_uuid=True for native UUID support if not already
+            pg.UUID(as_uuid=True),
             primary_key=True,
             unique=True,
             nullable=False

@@ -30,7 +30,7 @@ class PaygoService:
         paygo = await session.get(Paygo, uid)
         return PaygoRecords.model_validate(paygo, from_attributes=True) if paygo else None
 
-    # FIX: Changed method name and query to use product_serial_number
+    
     async def get_paygo_by_product_serial_number(self, product_serial_number: str, session: AsyncSession) -> Optional[PaygoRecords]:
         """
         Retrieves a single Paygo record by its product serial number.

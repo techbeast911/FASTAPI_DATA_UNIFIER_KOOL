@@ -13,7 +13,7 @@ class IotCreate(BaseModel):
     product_category_new_ref : str
     engineer_name : str
     product_type : str
-    # FIX: Use square brackets for Optional
+    
     date_sent_out : Optional[datetime] = None
 
 
@@ -29,7 +29,7 @@ class IotRecord(BaseModel):
     engineer_name : str
     product_type : str
     # FIX: If this is a datetime, it should be datetime, not str
-    date_sent_out : Optional[datetime] # Make it Optional here too if it can be null from the DB
+    date_sent_out : Optional[datetime] = None
 
 
 class IotUpdate(BaseModel):
@@ -41,5 +41,5 @@ class IotUpdate(BaseModel):
     product_category_new_ref : Optional[str] = None
     engineer_name : Optional[str] = None
     product_type : Optional[str] = None
-    # FIX: If this is a datetime, it should be datetime, not str
+    
     date_sent_out : Optional[datetime] = None

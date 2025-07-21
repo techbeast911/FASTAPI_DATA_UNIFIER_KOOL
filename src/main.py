@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-# Import only the single init_db from your core database file (aliased for clarity)
+
 from src.db.main import initdb as main_init_db 
 
 # Import routers

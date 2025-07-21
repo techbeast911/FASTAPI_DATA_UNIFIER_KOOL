@@ -1,6 +1,6 @@
 from uuid import UUID
 from typing import List, Optional
-from datetime import datetime # Import datetime
+from datetime import datetime 
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select, desc
@@ -11,7 +11,8 @@ from src.kool_assembly.schemas.schemas_inventory_in import InventoryInCreate, In
 
 
 class InventoryInService:
-    # ... (other methods)
+    """Service class for performing CRUD operations on inventory_in records.
+    """
 
     async def create_inventory_in(self, inventory_in_create: InventoryInCreate, session: AsyncSession) -> InventoryInRecord:
         """
@@ -48,8 +49,7 @@ class InventoryInService:
         await session.refresh(existing_inventory_in)
         return InventoryInRecord.model_validate(existing_inventory_in, from_attributes=True)
 
-    # Make sure to also apply this fix in `get_all_inventory_in`, `get_inventory_in_by_uid`, and `get_inventory_in_by_serial_number`
-    # wherever you are converting a `Battery` (or `Inventory_in`) object to `BatteryRecord` (or `InventoryInRecord`).
+  
 
     async def get_all_inventory_in(self, session: AsyncSession) -> List[InventoryInRecord]:
         """
