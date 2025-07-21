@@ -1,5 +1,5 @@
 # main.py - Entry point for the FastAPI application
-from fastapi import FastAPI
+from fastapi import FastAPI,BackgroundTasks
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -98,7 +98,6 @@ async def startup_event():
 
     scheduler.start()
     scheduler.add_job(scheduled_sync, trigger="cron", minute='*/1')
-    # Uncomment and adjust other scheduler jobs as needed
     # scheduler.add_job(composite_scheduled_sync, "cron", hour=14, minute=0)
     # scheduler.add_job(price_lists_scheduled_sync, "cron", hour=15, minute=0)
     # scheduler.add_job(sync_inventory_adjustments, "cron", hour=16, minute=0)
